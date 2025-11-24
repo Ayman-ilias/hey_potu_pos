@@ -9,5 +9,21 @@ export default defineConfig({
     },
     build: {
         outDir: 'dist',
-    }
+        sourcemap: false, // Disable sourcemaps in production for smaller bundle
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+                    'utils': ['axios', 'jspdf', 'jspdf-autotable', 'xlsx'],
+                },
+            },
+        },
+        chunkSizeWarningLimit: 1000,
+        minify: 'terser',
+        terserOptions: {
+            compress: {
+                drop_console: true, // Remove console.logs in production
+            },
+        },
+    },
 })

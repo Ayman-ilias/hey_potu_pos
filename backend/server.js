@@ -7,7 +7,32 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+// CORS configuration for production and development
+const allowedOrigins = [
+    'http://localhost:1111',
+    'http://localhost:5173',
+    'http://192.168.0.199:1111',
+    process.env.FRONTEND_URL, // Render frontend URL
+].filter(Boolean); // Remove undefined values
+
+app.use(cors({
+    origin: function (origin, callback) {
+        // Allow requests with no origin (mobile apps, curl, etc)
+        if (!origin) return callback(null, true);
+
+        // Allow Render.com domains
+        if (origin.includes('.onrender.com')) {
+            return callback(null, true);
+        }
+
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(null, true); // For development, allow all. In strict production, use: callback(new Error('Not allowed by CORS'))
+        }
+    },
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
