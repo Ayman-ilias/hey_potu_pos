@@ -1,10 +1,9 @@
 services:
-  # Backend API Service
   - type: web
     name: heypotu-backend
     env: node
     region: singapore
-    plan: free
+    plan: starter
     rootDir: backend
     buildCommand: npm install --production
     startCommand: npm start
@@ -24,7 +23,7 @@ services:
   - type: web
     name: heypotu-frontend
     env: static
-    plan: free
+    plan: starter
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
